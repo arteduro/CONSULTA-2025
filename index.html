@@ -394,13 +394,14 @@
         // URL del formulario de Google con el ID correcto
         const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSeBcPXbN76t_YMcvd5CJn95uVSQkyJsNJUtdvd1GQNWxfu7cg/formResponse";
         
-        // IDs de los campos extraídos del código fuente
+        // IDs de los campos - IMPORTANTE: Debes obtener los IDs reales de tu formulario
+        // Para obtenerlos: inspeccionar el formulario y buscar name="entry.XXXXXX"
         const FIELD_IDS = {
-            pregunta1: "entry.1105192107",  // ID para pregunta 1
-            pregunta2: "entry.1375380220",  // ID para pregunta 2
-            pregunta3: "entry.1167978425",  // ID para pregunta 3
-            pregunta4: "entry.889428155",   // ID para pregunta 4
-            pregunta5: "entry.1964916120"   // ID para pregunta 5
+            pregunta1: "entry.1105192107",  // Reemplaza con el ID real de tu formulario
+            pregunta2: "entry.1375380220",  // Reemplaza con el ID real de tu formulario
+            pregunta3: "entry.1167978425",  // Reemplaza con el ID real de tu formulario
+            pregunta4: "entry.889428155",   // Reemplaza con el ID real de tu formulario
+            pregunta5: "entry.1964916120"   // Reemplaza con el ID real de tu formulario
         };
         
         document.getElementById('enviar').addEventListener('click', async function() {
@@ -486,7 +487,14 @@
                 <p>Los resultados de esta consulta serán presentados al Congreso de la República.</p>
             `;
             
+            // Desplazarse suavemente hacia los resultados
             resultadoDiv.scrollIntoView({ behavior: 'smooth' });
+            
+            // Reiniciar el formulario después de 5 segundos
+            setTimeout(() => {
+                document.getElementById('encuestaForm').reset();
+                document.getElementById('enviar').disabled = false;
+            }, 5000);
         }
     </script>
 </body>
