@@ -389,17 +389,18 @@
     <footer>
         Consulta Popular 2025 - Todos los derechos reservados ©
     </footer>
-   
+    
     <script>
-        // URL del formulario de Google (debes reemplazarla con la tuya)
+        // URL del formulario de Google con el ID correcto
         const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSeBcPXbN76t_YMcvd5CJn95uVSQkyJsNJUtdvd1GQNWxfu7cg/formResponse";
-        // Nombres de los campos en el formulario de Google (debes reemplazarlos)
+        
+        // IDs de los campos extraídos del código fuente
         const FIELD_IDS = {
-            pregunta1: "entry.1105192107", // Reemplaza con el ID real del campo 1
-            pregunta2: "entry.1375380220", // Reemplaza con el ID real del campo 2
-            pregunta3: "entry.1167978425", // Reemplaza con el ID real del campo 3
-            pregunta4: "entry.889428155", // Reemplaza con el ID real del campo 4
-            pregunta5: "entry.1964916120"  // Reemplaza con el ID real del campo 5
+            pregunta1: "entry.1105192107",  // ID para pregunta 1
+            pregunta2: "entry.1375380220",  // ID para pregunta 2
+            pregunta3: "entry.1167978425",  // ID para pregunta 3
+            pregunta4: "entry.889428155",   // ID para pregunta 4
+            pregunta5: "entry.1964916120"   // ID para pregunta 5
         };
         
         document.getElementById('enviar').addEventListener('click', async function() {
@@ -451,13 +452,12 @@
             // Crear FormData con las respuestas
             const formData = new FormData();
             
-            // Agregar cada respuesta al FormData
-            for (const [pregunta, respuesta] of Object.entries(respuestas)) {
-                const fieldId = FIELD_IDS[pregunta];
-                if (fieldId) {
-                    formData.append(fieldId, respuesta);
-                }
-            }
+            // Agregar cada respuesta al FormData usando los IDs correctos
+            formData.append(FIELD_IDS.pregunta1, respuestas.pregunta1);
+            formData.append(FIELD_IDS.pregunta2, respuestas.pregunta2);
+            formData.append(FIELD_IDS.pregunta3, respuestas.pregunta3);
+            formData.append(FIELD_IDS.pregunta4, respuestas.pregunta4);
+            formData.append(FIELD_IDS.pregunta5, respuestas.pregunta5);
             
             // Enviar datos al formulario de Google
             const response = await fetch(GOOGLE_FORM_ACTION, {
@@ -466,8 +466,6 @@
                 mode: "no-cors" // Importante para evitar problemas CORS
             });
             
-            // Nota: no podemos verificar la respuesta debido a 'no-cors'
-            // Pero asumimos que se envió correctamente
             return response;
         }
         
