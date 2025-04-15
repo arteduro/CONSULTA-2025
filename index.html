@@ -394,14 +394,13 @@
         // URL del formulario de Google con el ID correcto
         const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSeBcPXbN76t_YMcvd5CJn95uVSQkyJsNJUtdvd1GQNWxfu7cg/formResponse";
         
-        // IDs de los campos - IMPORTANTE: Debes obtener los IDs reales de tu formulario
-        // Para obtenerlos: inspeccionar el formulario y buscar name="entry.XXXXXX"
+        // IDs de los campos actualizados con los valores extraídos
         const FIELD_IDS = {
-            pregunta1: "entry.1105192107",  // Reemplaza con el ID real de tu formulario
-            pregunta2: "entry.1375380220",  // Reemplaza con el ID real de tu formulario
-            pregunta3: "entry.1167978425",  // Reemplaza con el ID real de tu formulario
-            pregunta4: "entry.889428155",   // Reemplaza con el ID real de tu formulario
-            pregunta5: "entry.1964916120"   // Reemplaza con el ID real de tu formulario
+            pregunta1: "entry.1105192107",  // Jornada nocturna
+            pregunta2: "entry.1375380220",  // Recargo dominical/festivo
+            pregunta3: "entry.1167978425",  // Contratos prestación servicios
+            pregunta4: "entry.889428155",   // Auxilio SENA
+            pregunta5: "entry.1964916120"   // Licencia de paternidad
         };
         
         document.getElementById('enviar').addEventListener('click', async function() {
