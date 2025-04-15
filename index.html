@@ -434,8 +434,8 @@
                     respuestas[`pregunta${i}`] = document.querySelector(`input[name="pregunta${i}"]:checked`).value;
                 }
                 
-                // Enviar respuestas a Google Forms
-                await enviarAGoogleForms(respuestas);
+                // SOLUCIÓN MEJORADA: Enviar mediante método confiable
+                await enviarRespuestasConfiable(respuestas);
                 
                 // Mostrar resultados al usuario
                 mostrarResultados(respuestas);
@@ -448,25 +448,57 @@
             }
         });
         
-        async function enviarAGoogleForms(respuestas) {
-            // Crear FormData con las respuestas
-            const formData = new FormData();
+        // MÉTODO CONFIABLE PARA ENVIAR RESPUESTAS
+        async function enviarRespuestasConfiable(respuestas) {
+            // Opción 1: Envío mediante iframe (más confiable)
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
             
-            // Agregar cada respuesta al FormData usando los IDs correctos
+            const formData = new FormData();
             formData.append(FIELD_IDS.pregunta1, respuestas.pregunta1);
             formData.append(FIELD_IDS.pregunta2, respuestas.pregunta2);
             formData.append(FIELD_IDS.pregunta3, respuestas.pregunta3);
             formData.append(FIELD_IDS.pregunta4, respuestas.pregunta4);
             formData.append(FIELD_IDS.pregunta5, respuestas.pregunta5);
+            formData.append('submit', 'Submit');
             
-            // Enviar datos al formulario de Google
-            const response = await fetch(GOOGLE_FORM_ACTION, {
-                method: "POST",
-                body: formData,
-                mode: "no-cors" // Importante para evitar problemas CORS
-            });
+            const form = document.createElement('form');
+            form.action = GOOGLE_FORM_ACTION;
+            form.method = 'POST';
+            form.target = iframe.name;
             
-            return response;
+            for (let [key, value] of formData) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                form.appendChild(input);
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+            
+            // Opción 2: Envío alternativo por si falla el iframe
+            try {
+                const params = new URLSearchParams();
+                params.append(FIELD_IDS.pregunta1, respuestas.pregunta1);
+                params.append(FIELD_IDS.pregunta2, respuestas.pregunta2);
+                params.append(FIELD_IDS.pregunta3, respuestas.pregunta3);
+                params.append(FIELD_IDS.pregunta4, respuestas.pregunta4);
+                params.append(FIELD_IDS.pregunta5, respuestas.pregunta5);
+                params.append('submit', 'Submit');
+                
+                await fetch(GOOGLE_FORM_ACTION, {
+                    method: 'POST',
+                    body: params,
+                    mode: 'no-cors'
+                });
+            } catch (e) {
+                console.log("Envío alternativo falló, pero el iframe debería funcionar");
+            }
+            
+            return true;
         }
         
         function mostrarResultados(respuestas) {
