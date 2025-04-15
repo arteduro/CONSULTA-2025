@@ -305,7 +305,7 @@
                 <h3>1. ¿Aprueba usted una ley que modifique la jornada nocturna en Colombia, estableciendo que inicie a las 7:00 p.m. en lugar de las 10:00 p.m., y que se mantenga el pago adicional por las horas trabajadas en este horario?</h3>
                 <div class="opciones">
                     <div class="opcion">
-                        <input type="radio" name="pregunta1" id="p1_si" value="SI">
+                        <input type="radio" name="pregunta1" id="p1_si" value="SI" required>
                         <label for="p1_si">SI</label>
                     </div>
                     <div class="opcion">
@@ -320,7 +320,7 @@
                 <h3>2. ¿Está usted de acuerdo con que el recargo por trabajar los días domingos y festivos en Colombia se aumente del 75% actual al 100% del salario ordinario?</h3>
                 <div class="opciones">
                     <div class="opcion">
-                        <input type="radio" name="pregunta2" id="p2_si" value="SI">
+                        <input type="radio" name="pregunta2" id="p2_si" value="SI" required>
                         <label for="p2_si">SI</label>
                     </div>
                     <div class="opcion">
@@ -335,7 +335,7 @@
                 <h3>3. ¿Considera usted necesario que todo trabajador que lleve más de dos años laborando de manera continua para una misma empresa bajo la modalidad de contrato de prestación de servicios deba ser automáticamente vinculado mediante un contrato laboral formal de carácter indefinido, garantizando todos sus derechos laborales?</h3>
                 <div class="opciones">
                     <div class="opcion">
-                        <input type="radio" name="pregunta3" id="p3_si" value="SI">
+                        <input type="radio" name="pregunta3" id="p3_si" value="SI" required>
                         <label for="p3_si">SI</label>
                     </div>
                     <div class="opcion">
@@ -350,7 +350,7 @@
                 <h3>4. ¿Apoya usted una ley que garantice que los estudiantes del Servicio Nacional de Aprendizaje (SENA) reciban un auxilio económico equivalente al 100% del salario mínimo legal vigente durante su etapa productiva y al 50% durante su etapa de formación?</h3>
                 <div class="opciones">
                     <div class="opcion">
-                        <input type="radio" name="pregunta4" id="p4_si" value="SI">
+                        <input type="radio" name="pregunta4" id="p4_si" value="SI" required>
                         <label for="p4_si">SI</label>
                     </div>
                     <div class="opcion">
@@ -365,7 +365,7 @@
                 <h3>5. ¿Está usted de acuerdo con que la licencia de paternidad en Colombia se aumente progresivamente, a partir del año 2024, desde las dos semanas actuales hasta alcanzar doce semanas?</h3>
                 <div class="opciones">
                     <div class="opcion">
-                        <input type="radio" name="pregunta5" id="p5_si" value="SI">
+                        <input type="radio" name="pregunta5" id="p5_si" value="SI" required>
                         <label for="p5_si">SI</label>
                     </div>
                     <div class="opcion">
@@ -376,7 +376,7 @@
                 <div class="error" id="error5">Por favor seleccione una opción</div>
             </div>
             
-            <button type="button" id="enviar">ENVIAR MI VOTO</button>
+            <button type="submit" id="enviar">ENVIAR MI VOTO</button>
             <div class="loading" id="loading">
                 <div class="spinner"></div>
                 <p>Enviando respuestas...</p>
@@ -391,31 +391,30 @@
     </footer>
     
     <script>
-        // URL del formulario de Google con el ID correcto
-        const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSeBcPXbN76t_YMcvd5CJn95uVSQkyJsNJUtdvd1GQNWxfu7cg/formResponse";
+        // URL del formulario de Google
+        const GOOGLE_FORM_ID = "1FAIpQLSeBcPXbN76t_YMcvd5CJn95uVSQkyJsNJUtdvd1GQNWxfu7cg";
+        const GOOGLE_FORM_ACTION = `https://docs.google.com/forms/d/e/${GOOGLE_FORM_ID}/formResponse`;
         
-        // IDs de los campos actualizados con los valores extraídos
+        // IDs de los campos (verifica que sean correctos)
         const FIELD_IDS = {
-            pregunta1: "entry.1105192107",  // Jornada nocturna
-            pregunta2: "entry.1375380220",  // Recargo dominical/festivo
-            pregunta3: "entry.1167978425",  // Contratos prestación servicios
-            pregunta4: "entry.889428155",   // Auxilio SENA
-            pregunta5: "entry.1964916120"   // Licencia de paternidad
+            pregunta1: "entry.1105192107",
+            pregunta2: "entry.1375380220",
+            pregunta3: "entry.1167978425",
+            pregunta4: "entry.889428155",
+            pregunta5: "entry.1964916120"
         };
-        
-        document.getElementById('enviar').addEventListener('click', async function() {
+
+        document.getElementById('encuestaForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
             // Validar que todas las preguntas tengan respuesta
             let todasRespondidas = true;
-            
             for (let i = 1; i <= 5; i++) {
-                const pregunta = document.querySelector(`input[name="pregunta${i}"]:checked`);
-                const errorElement = document.getElementById(`error${i}`);
-                
-                if (!pregunta) {
-                    errorElement.style.display = 'block';
+                if (!document.querySelector(`input[name="pregunta${i}"]:checked`)) {
+                    document.getElementById(`error${i}`).style.display = 'block';
                     todasRespondidas = false;
                 } else {
-                    errorElement.style.display = 'none';
+                    document.getElementById(`error${i}`).style.display = 'none';
                 }
             }
             
@@ -429,78 +428,72 @@
             
             try {
                 // Recoger respuestas
-                let respuestas = {};
-                for (let i = 1; i <= 5; i++) {
-                    respuestas[`pregunta${i}`] = document.querySelector(`input[name="pregunta${i}"]:checked`).value;
-                }
+                const respuestas = {
+                    pregunta1: document.querySelector('input[name="pregunta1"]:checked').value,
+                    pregunta2: document.querySelector('input[name="pregunta2"]:checked').value,
+                    pregunta3: document.querySelector('input[name="pregunta3"]:checked').value,
+                    pregunta4: document.querySelector('input[name="pregunta4"]:checked').value,
+                    pregunta5: document.querySelector('input[name="pregunta5"]:checked').value
+                };
+
+                // Método principal: iframe oculto
+                await enviarPorIframe(respuestas);
                 
-                // SOLUCIÓN MEJORADA: Enviar mediante método confiable
-                await enviarRespuestasConfiable(respuestas);
-                
-                // Mostrar resultados al usuario
+                // Mostrar confirmación
                 mostrarResultados(respuestas);
                 
             } catch (error) {
-                console.error("Error al enviar respuestas:", error);
-                alert("Ocurrió un error al enviar sus respuestas. Por favor intente nuevamente.");
+                console.error("Error:", error);
+                alert("Hubo un problema al enviar tus respuestas. Por favor recarga la página e intenta nuevamente.");
             } finally {
                 document.getElementById('loading').style.display = 'none';
             }
         });
-        
-        // MÉTODO CONFIABLE PARA ENVIAR RESPUESTAS
-        async function enviarRespuestasConfiable(respuestas) {
-            // Opción 1: Envío mediante iframe (más confiable)
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            document.body.appendChild(iframe);
-            
-            const formData = new FormData();
-            formData.append(FIELD_IDS.pregunta1, respuestas.pregunta1);
-            formData.append(FIELD_IDS.pregunta2, respuestas.pregunta2);
-            formData.append(FIELD_IDS.pregunta3, respuestas.pregunta3);
-            formData.append(FIELD_IDS.pregunta4, respuestas.pregunta4);
-            formData.append(FIELD_IDS.pregunta5, respuestas.pregunta5);
-            formData.append('submit', 'Submit');
-            
-            const form = document.createElement('form');
-            form.action = GOOGLE_FORM_ACTION;
-            form.method = 'POST';
-            form.target = iframe.name;
-            
-            for (let [key, value] of formData) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = value;
-                form.appendChild(input);
-            }
-            
-            document.body.appendChild(form);
-            form.submit();
-            
-            // Opción 2: Envío alternativo por si falla el iframe
-            try {
-                const params = new URLSearchParams();
-                params.append(FIELD_IDS.pregunta1, respuestas.pregunta1);
-                params.append(FIELD_IDS.pregunta2, respuestas.pregunta2);
-                params.append(FIELD_IDS.pregunta3, respuestas.pregunta3);
-                params.append(FIELD_IDS.pregunta4, respuestas.pregunta4);
-                params.append(FIELD_IDS.pregunta5, respuestas.pregunta5);
-                params.append('submit', 'Submit');
+
+        // Método principal de envío (iframe oculto)
+        function enviarPorIframe(respuestas) {
+            return new Promise((resolve) => {
+                // Crear iframe oculto
+                const iframe = document.createElement('iframe');
+                iframe.name = 'hidden_iframe_' + Date.now();
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
                 
-                await fetch(GOOGLE_FORM_ACTION, {
-                    method: 'POST',
-                    body: params,
-                    mode: 'no-cors'
+                // Crear formulario temporal
+                const form = document.createElement('form');
+                form.action = GOOGLE_FORM_ACTION;
+                form.method = 'POST';
+                form.target = iframe.name;
+                
+                // Agregar campos al formulario
+                Object.entries(FIELD_IDS).forEach(([key, id]) => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = id;
+                    input.value = respuestas[key] || '';
+                    form.appendChild(input);
                 });
-            } catch (e) {
-                console.log("Envío alternativo falló, pero el iframe debería funcionar");
-            }
-            
-            return true;
+                
+                // Campo submit requerido
+                const submitInput = document.createElement('input');
+                submitInput.type = 'hidden';
+                submitInput.name = 'submit';
+                submitInput.value = 'Submit';
+                form.appendChild(submitInput);
+                
+                // Agregar formulario al documento y enviar
+                document.body.appendChild(form);
+                form.submit();
+                
+                // Limpiar después de enviar
+                setTimeout(() => {
+                    document.body.removeChild(form);
+                    document.body.removeChild(iframe);
+                    resolve(true);
+                }, 2000);
+            });
         }
-        
+
         function mostrarResultados(respuestas) {
             const resultadoDiv = document.getElementById('resultado');
             resultadoDiv.style.display = 'block';
