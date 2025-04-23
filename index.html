@@ -204,19 +204,36 @@
         #resultado h2 {
             margin-top: 0;
             color: var(--amarillo);
+            font-size: 1.8rem;
+        }
+        
+        #resultado h3 {
+            color: var(--amarillo);
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
         }
         
         #resultado ul {
             text-align: left;
-            max-width: 500px;
+            max-width: 100%;
             margin: 1.5rem auto;
             padding: 0;
             list-style-type: none;
+            columns: 2;
+            column-gap: 2rem;
         }
         
         #resultado li {
             padding: 0.5rem 0;
+            break-inside: avoid;
             border-bottom: 1px solid rgba(252, 209, 22, 0.3);
+        }
+        
+        .respuestas-container {
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
         }
         
         .error {
@@ -261,6 +278,14 @@
             
             .pregunta h3 {
                 font-size: 1rem;
+            }
+            
+            #resultado ul {
+                columns: 1;
+            }
+            
+            #resultado h2 {
+                font-size: 1.5rem;
             }
         }
         
@@ -590,22 +615,26 @@
             resultadoDiv.innerHTML = `
                 <h2>¡SU VOTO HA SIDO REGISTRADO!</h2>
                 <p>Gracias por participar en la Consulta Popular 2025 sobre reformas laborales.</p>
-                <p>Sus respuestas:</p>
-                <ul>
-                    <li><strong>1. Jornada laboral diurna:</strong> ${respuestas.pregunta1}</li>
-                    <li><strong>2. Recargo dominical/festivo:</strong> ${respuestas.pregunta2}</li>
-                    <li><strong>3. Incentivos para PYMES:</strong> ${respuestas.pregunta3}</li>
-                    <li><strong>4. Permisos médicos y menstruales:</strong> ${respuestas.pregunta4}</li>
-                    <li><strong>5. Contratación personas con discapacidad:</strong> ${respuestas.pregunta5}</li>
-                    <li><strong>6. Contratos para aprendices SENA:</strong> ${respuestas.pregunta6}</li>
-                    <li><strong>7. Trabajadores plataformas digitales:</strong> ${respuestas.pregunta7}</li>
-                    <li><strong>8. Régimen laboral agrario:</strong> ${respuestas.pregunta8}</li>
-                    <li><strong>9. Eliminar tercerización laboral:</strong> ${respuestas.pregunta9}</li>
-                    <li><strong>10. Formalización trabajadores informales:</strong> ${respuestas.pregunta10}</li>
-                    <li><strong>11. Contratos indefinidos:</strong> ${respuestas.pregunta11}</li>
-                    <li><strong>12. Bono pensional campesinos:</strong> ${respuestas.pregunta12}</li>
-                </ul>
-                <p>Los resultados de esta consulta serán presentados al Congreso de la República.</p>
+                
+                <div class="respuestas-container">
+                    <h3>Sus respuestas:</h3>
+                    <ul>
+                        <li><strong>1. Jornada laboral diurna:</strong> ${respuestas.pregunta1}</li>
+                        <li><strong>2. Recargo dominical/festivo:</strong> ${respuestas.pregunta2}</li>
+                        <li><strong>3. Incentivos para PYMES:</strong> ${respuestas.pregunta3}</li>
+                        <li><strong>4. Permisos médicos y menstruales:</strong> ${respuestas.pregunta4}</li>
+                        <li><strong>5. Contratación personas con discapacidad:</strong> ${respuestas.pregunta5}</li>
+                        <li><strong>6. Contratos para aprendices SENA:</strong> ${respuestas.pregunta6}</li>
+                        <li><strong>7. Trabajadores plataformas digitales:</strong> ${respuestas.pregunta7}</li>
+                        <li><strong>8. Régimen laboral agrario:</strong> ${respuestas.pregunta8}</li>
+                        <li><strong>9. Eliminar tercerización laboral:</strong> ${respuestas.pregunta9}</li>
+                        <li><strong>10. Formalización trabajadores informales:</strong> ${respuestas.pregunta10}</li>
+                        <li><strong>11. Contratos indefinidos:</strong> ${respuestas.pregunta11}</li>
+                        <li><strong>12. Bono pensional campesinos:</strong> ${respuestas.pregunta12}</li>
+                    </ul>
+                </div>
+                
+                <p style="font-style: italic;">Los resultados de esta consulta serán presentados al Congreso de la República.</p>
             `;
             
             resultadoDiv.scrollIntoView({ behavior: 'smooth' });
